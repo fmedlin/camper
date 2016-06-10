@@ -90,3 +90,12 @@ dependencies {
     testCompile "org.fmedlin:camper:0.1.0"
 }
 ```
+
+# TODO
+
+- [ ] Add all extra types
+- [ ] Improve  README
+- [ ] Add choosers to builder and sample
+- [ ] Add live template xml file
+- [ ] Add intent reader class
+- [ ] Add bundle builder class
