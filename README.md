@@ -23,7 +23,7 @@ public class MainActivity {
 public class MainActivity {
   public void doit() {
     Intent intent = IntentBuilder.start(TargetActivity.class)
-      from(this)
+      .from(this)
       .extra(EXTRA_ITEM, item)
       .extra(EXTRA_ID, 2L)
       .execute();
