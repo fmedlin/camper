@@ -2,12 +2,13 @@ package org.fmedlin.camper;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Parcelable;
 
 import com.fmedlin.intentbuilder.BuildConfig;
 
 import org.fmedlin.camper.IntentBuilder.ExplicitIntentBuilder;
 import org.fmedlin.camper.IntentBuilder.ImplicitIntentBuilder;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
@@ -16,6 +17,7 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplication;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import static org.assertj.android.api.Assertions.assertThat;
 
@@ -33,26 +35,111 @@ public class IntentBuilderTest {
     }
 
     @Test
-    public void testTypeAndExtraSetters() {
+    public void testExtraSetters() {
+        CharSequence cs = "charsequence";
+        CharSequence[] csa = new CharSequence[] { "cs1", "cs2", "cs3"};
+
+
         Intent intent = IntentBuilder.with(RuntimeEnvironment.application)
                 .action("intent action")
                 .type("text/plain")
+                .extra("byte extra", (byte) 0x21)
+                .extra("byte array extra", new byte[] {(byte) 0xaa, (byte) 0xbb})
+                .extra("char extra", 'c')
+                .extra("char array extra", new char[] {'a', 'b', 'c'})
                 .extra("string extra", "string")
+                .extra("string array extra", new String[] {"first", "second", "third"})
+                .extra("cs extra", cs)
+                .extra("cs array extra", csa)
+                .extra("short extra", (short) 8)
+                .extra("short array extra", new short[] {82, 83, 84})
                 .extra("int extra", 1)
+                .extra("int array extra", new int[] {42, 43, 44})
                 .extra("long extra", 2L)
+                .extra("long array extra", new long[] {2L, 3L})
                 .extra("float extra", 3f)
+                .extra("float array extra", new float[] {4f, 5f, 6f})
+                .extra("double extra", 0.5)
+                .extra("double array extra", new double[] {0.1, 0.2, 0.3})
                 .extra("boolean extra", true)
+                .extra("boolean array extra", new boolean[] {true, true, false, true})
                 .extra("serializable extra", (Serializable) "serialized")
+                .extra("parcelable extra", Uri.parse("http://google.com"))
+                .extra("parcelable array extra", new Parcelable[]{ Uri.parse("http://google.com"), Uri.parse("http://apple.com")})
+                .extraListOfString("string list extra", Arrays.asList("first", "second", "third"))
+                .extraListOfCharSequence("cs list extra", Arrays.asList(csa))
+                .extraListOfInteger("integer list extra", Arrays.asList(51, 52, 53))
+                .extraListOfParcelable("parcelable list extra", Arrays.asList((Parcelable) Uri.parse("http://google.com"), Uri.parse("http://apple.com")))
                 .build();
 
         assertThat(intent).hasAction("intent action")
                 .hasType("text/plain")
+                .hasExtra("byte extra", (byte) 0x21)
+                .hasExtra("byte array extra", new byte[] {(byte) 0xaa, (byte) 0xbb})
+                .hasExtra("char extra", 'c')
+                .hasExtra("char array extra", new char[] {'a', 'b', 'c'})
                 .hasExtra("string extra", "string")
+                .hasExtra("string array extra", new String[] {"first", "second", "third"})
+                .hasExtra("cs extra", "charsequence")
+                .hasExtra("cs array extra", new CharSequence[] { "cs1", "cs2", "cs3"})
+                .hasExtra("short extra", (short) 8)
+                .hasExtra("short array extra", new short[] {82, 83, 84})
                 .hasExtra("int extra", 1)
+                .hasExtra("int array extra", new int[] {42,43, 44})
                 .hasExtra("long extra", 2L)
+                .hasExtra("long array extra", new long[] {2L, 3L})
                 .hasExtra("float extra", 3f)
+                .hasExtra("float array extra", new float[] {4f, 5f, 6f})
+                .hasExtra("double extra", 0.5)
+                .hasExtra("double array extra", new double[] {0.1, 0.2, 0.3})
                 .hasExtra("boolean extra", true)
-                .hasExtra("serializable extra", "serialized");
+                .hasExtra("boolean array extra", new boolean[] {true, true, false, true})
+                .hasExtra("serializable extra", "serialized")
+                .hasExtra("parcelable extra", Uri.parse("http://google.com"))
+                .hasExtra("parcelable array extra", new Parcelable[]{ Uri.parse("http://google.com"), Uri.parse("http://apple.com")})
+                .hasExtra("string list extra", Arrays.asList("first", "second", "third"))
+                .hasExtra("cs list extra", Arrays.asList(csa))
+                .hasExtra("integer list extra", Arrays.asList(51, 52, 53))
+                .hasExtra("parcelable list extra", Arrays.asList(Uri.parse("http://google.com"), Uri.parse("http://apple.com")));
+    }
+
+    @Test
+    public void testBundleExtra() {
+        Bundle b = new Bundle();
+        b.putString("sytring extra", "bundle value");
+
+        Intent intent = IntentBuilder.with(RuntimeEnvironment.application)
+                .action("intent action")
+                .extra("bundle extra", b)
+                .build();
+
+        assertThat(intent).hasAction("intent action")
+                .hasExtra("bundle extra", b);
+    }
+
+    @Test
+    public void testExtras() {
+        Intent extraIntent = IntentBuilder.with(RuntimeEnvironment.application)
+                .action("intent action")
+                .extra("first", 1)
+                .extra("second", 2)
+                .build();
+
+        Bundle extraBundle = new Bundle();
+        extraBundle.putInt("one", 1);
+        extraBundle.putInt("two", 2);
+
+        Intent intent = IntentBuilder.with(RuntimeEnvironment.application)
+                .action("intent action")
+                .extras(extraIntent)
+                .extras(extraBundle)
+                .build();
+
+        assertThat(intent).hasAction("intent action")
+                .hasExtra("first", 1)
+                .hasExtra("second", 2)
+                .hasExtra("one", 1)
+                .hasExtra("two", 2);
     }
 
     @Test

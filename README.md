@@ -93,8 +93,9 @@ dependencies {
 
 # TODO
 
-- [ ] Add all extra types
+- [X] Add all extra types
 - [ ] Improve  README
+- [ ] Add javadocs, sources and upload to bintray
 - [ ] Add choosers to builder and sample
 - [ ] Add live template xml file
 - [ ] Add intent reader class

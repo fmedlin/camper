@@ -5,10 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IntentBuilder {
     Context context;
@@ -76,13 +79,63 @@ public class IntentBuilder {
         return this;
     }
 
+    public IntentBuilder extra(@NonNull String key, byte value) {
+        getExtras().putByte(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, byte[] values) {
+        getExtras().putByteArray(key, values);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, char value) {
+        getExtras().putChar(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, char[] values) {
+        getExtras().putCharArray(key, values);
+        return this;
+    }
+
     public IntentBuilder extra(@NonNull String key, String value) {
         getExtras().putString(key, value);
         return this;
     }
 
+    public IntentBuilder extra(@NonNull String key, String[] values) {
+        getExtras().putStringArray(key, values);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, CharSequence value) {
+        getExtras().putCharSequence(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, CharSequence[] values) {
+        getExtras().putCharSequenceArray(key, values);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, short value) {
+        getExtras().putShort(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, short[] values) {
+        getExtras().putShortArray(key, values);
+        return this;
+    }
+
     public IntentBuilder extra(@NonNull String key, int value) {
         getExtras().putInt(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, int[] values) {
+        getExtras().putIntArray(key, values);
         return this;
     }
 
@@ -96,13 +149,73 @@ public class IntentBuilder {
         return this;
     }
 
+    public IntentBuilder extra(@NonNull String key, double value) {
+        getExtras().putDouble(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, double[] values) {
+        getExtras().putDoubleArray(key, values);
+        return this;
+    }
+
     public IntentBuilder extra(@NonNull String key, boolean value) {
         getExtras().putBoolean(key, value);
         return this;
     }
 
+    public IntentBuilder extra(@NonNull String key, boolean[] values) {
+        getExtras().putBooleanArray(key, values);
+        return this;
+    }
+
     public IntentBuilder extra(@NonNull String key, Serializable value) {
         getExtras().putSerializable(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, Parcelable value) {
+        getExtras().putParcelable(key, value);
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, Parcelable[] values) {
+        getExtras().putParcelableArray(key, values);
+        return this;
+    }
+
+    public IntentBuilder extraListOfString(@NonNull String key, List<String> values) {
+        getExtras().putStringArrayList(key, new ArrayList<>(values));
+        return this;
+    }
+
+    public IntentBuilder extraListOfCharSequence(@NonNull String key, List<CharSequence> values) {
+        getExtras().putCharSequenceArrayList(key, new ArrayList<>(values));
+        return this;
+    }
+
+    public IntentBuilder extraListOfInteger(@NonNull String key, List<Integer> values) {
+        getExtras().putIntegerArrayList(key, new ArrayList<>(values));
+        return this;
+    }
+
+    public IntentBuilder extraListOfParcelable(@NonNull String key, List<Parcelable> values) {
+        getExtras().putParcelableArrayList(key, new ArrayList<>(values));
+        return this;
+    }
+
+    public IntentBuilder extra(@NonNull String key, Bundle value) {
+        getExtras().putBundle(key, value);
+        return this;
+    }
+
+    public IntentBuilder extras(Intent intent) {
+        getExtras().putAll(intent.getExtras());
+        return this;
+    }
+
+    public IntentBuilder extras(Bundle bundle) {
+        getExtras().putAll(bundle);
         return this;
     }
 
@@ -131,7 +244,6 @@ public class IntentBuilder {
         }
 
         setDataAndType(intent);
-
         return intent;
     }
 
