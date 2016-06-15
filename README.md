@@ -1,6 +1,6 @@
 Intent Builder
 ==============
-Some useful builders and utilities, because... Android Intents!
+Some useful builders and utilities.
 
 Install
 -------
