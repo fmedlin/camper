@@ -1,11 +1,9 @@
-# Intent Builder
-Because, Android Intents!
+Intent Builder
+==============
+Some useful builders and utilities, because... Android Intents!
 
----
-
-Some useful Intent utilities
-## Install
----
+Install
+-------
 
 Install from gradle using jcenter.
 
@@ -19,8 +17,8 @@ dependencies {
 }
 ```
 
-## Examples
----
+Examples
+--------
 
 ### Start an explicit Activity
 
@@ -97,26 +95,26 @@ public Intent copyIntent(Intent original, String emailAddress) {
     .build();
 ```
 
-## Todo
----
+Todo
+----
 
 - [X] Add all extra types
-- [ ] Improve  README
-- [ ] Add javadocs, sources and upload to bintray
+- [X] Improve  README
+- [X] Add bintray javadocs and sources
 - [ ] Add choosers to builder and sample
 - [ ] Add live template xml file
 - [ ] Add intent reader class
 - [ ] Add bundle builder class
 
-## Contributing
----
+Contributing
+------------
 
 * Clone the project
 * Run unit tests with `./gradlew test`
 * Make a pull request with your changes, including tests.
 
-## License
----
+License
+-------
 
 ```
 Copyright 2016 by Fred Medlin.
