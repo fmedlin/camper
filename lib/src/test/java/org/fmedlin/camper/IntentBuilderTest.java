@@ -106,7 +106,7 @@ public class IntentBuilderTest {
     @Test
     public void testBundleExtra() {
         Bundle b = new Bundle();
-        b.putString("sytring extra", "bundle value");
+        b.putString("string extra", "bundle value");
 
         Intent intent = IntentBuilder.with(RuntimeEnvironment.application)
                 .action("intent action")
