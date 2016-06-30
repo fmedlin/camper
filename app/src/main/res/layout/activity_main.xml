@@ -29,6 +29,12 @@
             android:layout_height="wrap_content"
             android:text="Implicit"/>
 
+        <Button
+            android:id="@+id/chooser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chooser"/>
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

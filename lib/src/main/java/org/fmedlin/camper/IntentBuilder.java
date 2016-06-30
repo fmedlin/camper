@@ -3,6 +3,7 @@ package org.fmedlin.camper;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -14,8 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IntentBuilder {
-    Context context;
+    private IntentBuilder() { }
 
+    Context context;
     String action;
     String type;
     Uri data;
@@ -46,9 +48,6 @@ public class IntentBuilder {
         return new CopyIntentBuilder(intent);
     }
 
-
-    private IntentBuilder() {
-    }
 
     private IntentBuilder(Context context) {
         this.context = context;
@@ -276,9 +275,24 @@ public class IntentBuilder {
         return intent;
     }
 
+    public IntentBuilder chooser(String title) {
+        throw new IllegalStateException("Only for implicit intents");
+    }
+
+    public IntentBuilder execute(Context context, PackageManager packageManager) {
+        throw new IllegalStateException("Only for implicit intents");
+    }
+
+    public IntentBuilder onResolveFailure(ResolveFailure callback) {
+        throw new IllegalStateException("Only for implicit intents");
+    }
+
     static public class ImplicitIntentBuilder extends IntentBuilder {
 
         Uri uri;
+        String chooserTitle;
+        Intent chooser;
+        boolean failedToResolve;
 
         public ImplicitIntentBuilder(@NonNull Uri uri) {
             this.uri = uri;
@@ -291,6 +305,39 @@ public class IntentBuilder {
         public ImplicitIntentBuilder(String action, Uri uri) {
             this.action = action;
             this.uri = uri;
+        }
+
+        @Override
+        public IntentBuilder chooser(String chooserTitle) {
+            this.chooserTitle = chooserTitle;
+            return this;
+        }
+
+        public IntentBuilder execute(Context context, PackageManager pm) {
+            Intent sendIntent = buildSendIntent();
+            if (sendIntent.resolveActivity(pm) != null) {
+                context.startActivity(Intent.createChooser(sendIntent, chooserTitle));
+            } else {
+                failedToResolve = true;
+            }
+
+            return this;
+        }
+
+        public IntentBuilder onResolveFailure(ResolveFailure callback) {
+            if (failedToResolve && callback != null) {
+                callback.onFail();
+            }
+            return this;
+        }
+
+        private Intent buildSendIntent() {
+            return super.build();
+        }
+
+        @Override
+        public Intent build() {
+            return (chooserTitle != null) ? Intent.createChooser(buildSendIntent(), chooserTitle) : super.build();
         }
 
         @Override

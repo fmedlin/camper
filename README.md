@@ -83,6 +83,9 @@ Intent intent = IntentBuilder.with(this)
   .extra(EXTRA_PCT_COMPLETE, 3.141f)
   .extra(EXTRA_IS_EXTRA, true)
   .extra(EXTRA_STATUS, (Serializable) "Likes to read email")
+  .category(Intent.CATEGORY_HOME, Intent.CATEGORY_BROWSABLE)
+  .flags(Intent.FLAG_ACTIVITY_NO_ANIMATION, Intent.FLAG_ACTIVITY_NO_HISTORY)
+  .fillIn(intent, fillInFlags)
   .build();
 ```
 
@@ -95,13 +98,37 @@ public Intent copyIntent(Intent original, String emailAddress) {
     .build();
 ```
 
+### Choosers
+
+Start a chooser on the intent if it resolves
+
+``` java
+IntentBuilder.with(Intent.ACTION_SEND)
+  .chooser(getString(R.string.chooser_title))
+  .execute(context, getPackageManager())
+  .onResolveFailure(listener)
+  .execute()
+```
+
+or just construct the chooser intent
+
+``` java
+Intent chooserIntent = IntentBuilder.with(Intent.ACTION_SEND)
+  .chooser(getString(R.string.chooser_title))
+  .build()
+
+// I am responsible for resolving the activity.
+startActivity(chooserIntent);
+```
+
 Todo
 ----
 
 - [X] Add all extra types
 - [X] Improve  README
 - [X] Add bintray javadocs and sources
-- [ ] Add choosers to builder and sample
+- [X] Add choosers to builder and sample
+- [ ] Add categories, flags, fillIns
 - [ ] Add live template xml file
 - [ ] Add intent reader class
 - [ ] Add bundle builder class

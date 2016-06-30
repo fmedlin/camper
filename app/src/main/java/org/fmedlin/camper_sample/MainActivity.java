@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnStart;
     Button btnImplicit;
+    Button btnChooser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btnStart = (Button) findViewById(R.id.start);
         btnImplicit = (Button) findViewById(R.id.implicit);
+        btnChooser = (Button) findViewById(R.id.chooser);
 
         btnStart.setOnClickListener(new OnClickListener() {
             @Override
@@ -43,6 +45,17 @@ public class MainActivity extends AppCompatActivity {
                         .data(Uri.parse("http://google.com"))
                         .build();
                 startActivity(intent);
+            }
+        });
+
+        btnChooser.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IntentBuilder.with(Intent.ACTION_SEND)
+                        .extra(Intent.EXTRA_TEXT, "Falling leaves of sycamore")
+                        .type("text/plain")
+                        .chooser("Pick one:")
+                        .execute(MainActivity.this, getPackageManager());
             }
         });
     }

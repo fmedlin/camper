@@ -1,6 +1,9 @@
 package org.fmedlin.camper;
 
+import android.app.Application;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,21 +12,33 @@ import com.fmedlin.intentbuilder.BuildConfig;
 
 import org.fmedlin.camper.IntentBuilder.ExplicitIntentBuilder;
 import org.fmedlin.camper.IntentBuilder.ImplicitIntentBuilder;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.res.builder.RobolectricPackageManager;
 import org.robolectric.shadows.ShadowApplication;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
 import static org.assertj.android.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class IntentBuilderTest {
+
+    TestActivity activity;
+
+    @Before
+    public void setUp() {
+        activity = Robolectric.buildActivity(TestActivity.class).create().get();
+    }
 
     @Test
     public void testStartActivityWithExplicitIntent() {
@@ -193,5 +208,46 @@ public class IntentBuilderTest {
         Intent original = new Intent();
         Intent copy = IntentBuilder.copy(original).build();
         assertThat(original).isNotEqualTo(copy);
+    }
+
+    @Test
+    public void testChooserExecution() {
+        setupResolver(Intent.ACTION_SEND);
+        Application app = RuntimeEnvironment.application;
+
+        IntentBuilder.with(Intent.ACTION_SEND)
+                .chooser("Pick me")
+                .execute(app.getApplicationContext(), app.getPackageManager())
+                .onResolveFailure(new ResolveFailure() {
+                    @Override
+                    public void onFail() {
+                        fail("Should not have failed activity resolution");
+                    }
+                });
+
+        Intent intent = shadowOf(RuntimeEnvironment.application).getNextStartedActivity();
+        assertThat(intent).hasAction(Intent.ACTION_CHOOSER);
+    }
+
+    @Test
+    public void testChooserBuilding() {
+        Intent chooser = IntentBuilder.with(Intent.ACTION_SEND)
+                .chooser("Pick me")
+                .build();
+        assertThat(chooser).hasAction(Intent.ACTION_CHOOSER);
+    }
+
+    private void setupResolver(String action) {
+        Intent intent = new Intent(action);
+        RobolectricPackageManager pm = RuntimeEnvironment.getRobolectricPackageManager();
+
+        ResolveInfo resolveInfo = new ResolveInfo();
+        try {
+            resolveInfo.activityInfo = pm.getActivityInfo(activity.getComponentName(), 0);
+        } catch (NameNotFoundException e) {
+            fail(e.getMessage());
+        }
+
+        pm.addResolveInfoForIntent(intent, resolveInfo);
     }
 }
