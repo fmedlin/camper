@@ -128,10 +128,14 @@ Todo
 - [X] Improve  README
 - [X] Add bintray javadocs and sources
 - [X] Add choosers to builder and sample
+- [ ] Add travis.yml
 - [ ] Add categories, flags, fillIns
+- [ ] 0.2
 - [ ] Add live template xml file
 - [ ] Add intent reader class
+- [ ] 0.3
 - [ ] Add bundle builder class
+- [ ] 0.4
 
 Contributing
 ------------
