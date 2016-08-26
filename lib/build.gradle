@@ -8,12 +8,12 @@ def versionPatch = 0
 def versionBuild = 0
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "23.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         setProperty("archivesBaseName", 'camper')
@@ -31,13 +31,13 @@ android {
 dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support:support-annotations:23.4.0'
+    androidTestCompile 'com.android.support:support-annotations:24.2.0'
 
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.2.0'
 
     testCompile 'com.squareup.assertj:assertj-android:1.1.1'
     testCompile 'junit:junit:4.12'
-    testCompile 'org.robolectric:robolectric:3.1-rc1'
+    testCompile 'org.robolectric:robolectric:3.1'
 }
 
 group = 'org.fmedlin'
